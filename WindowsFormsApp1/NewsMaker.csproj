@@ -106,7 +106,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandFactory.cs" />
     <Compile Include="Connection\DbConnector.cs" />
+    <Compile Include="Controller\Controller.cs" />
     <Compile Include="Dao\Dao.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -144,8 +146,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controller\" />
+    <Folder Include="NewFolder1\" />
     <Folder Include="Service\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

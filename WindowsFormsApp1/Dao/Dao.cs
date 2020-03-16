@@ -1,30 +1,44 @@
-﻿using ServiceStack.OrmLite;
+﻿using NewsMaker.ConnectionFactory;
+using ServiceStack.OrmLite;
 using ServiceStack.Text;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindowsFormsApp1.Connection;
 using WindowsFormsApp1.Model;
 
-namespace WindowsFormsApp1.Dao
+namespace NewsMaker.AbstractDao
 {
-    public abstract class Dao
+    public class Dao
     {
-        DbFactory connectionfactory = new DbFactory();
-        public void save()
+        DbConnectionFactory dbConnector;
+        public void Save(Article article)
         {
-            var dbFactory = connectionfactory.createConnection();
+            var dbFactory = dbConnector.createConnectionFactory();
+
             using (var db = dbFactory.Open())
             {
-                if (db.CreateTableIfNotExists<Article>())
-                {
-                    db.Insert(new Article { Id = 1, Name = "Seed Data" });
-                }
+                db.CreateTableIfNotExists<Article>();
+                db.Insert(article);
 
-                var result = db.SingleById<Article>(1);
-                result.PrintDump(); //= {Id: 1, Name:Seed Data}
+            }
+        }
+        public List<Article> SelectAll()
+        {
+            var dbFactory = dbConnector.createConnectionFactory();
+
+            using (var db = dbFactory.Open())
+            {
+                var articles = db.Select<Article>();
+                articles.PrintDump();
+                return articles;
+            }
+        }
+
+        public List<Article> SelectById(int[] ids)
+        {
+            var dbFactory = dbConnector.createConnectionFactory();
+            using (var db = dbFactory.Open())
+            {
+                var articlesByIds = db.SelectByIds<Article>(ids);
+                return articlesByIds;
             }
         }
     }

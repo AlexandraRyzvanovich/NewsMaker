@@ -7,25 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using WindowsFormsApp1.Model;
 
-namespace WindowsFormsApp1.Connection
+namespace NewsMaker.ConnectionFactory
 {
-    public class DbFactory
+    public class DbConnectionFactory
     {
-        private const string server = "server";
-        private const string port = "5432";
-        private const string database = "news";
-        private string username = "postgres";
-        private string password = "123456";
-        const string searchPath1 = "schema1,schema3";
+        public static string PostgresDb_10 = "Server=localhost;Port=5432;User Id=postgres;Password=123456;Database=postgres;Pooling=true;MinPoolSize=0;MaxPoolSize=200";
 
-
-        public OrmLiteConnectionFactory createConnection()
+        public OrmLiteConnectionFactory createConnectionFactory()
         {
-            var connString1 = $"Server ={ server}; Port ={port}; Search Path = { searchPath1 }; Database ={ database}; UserId ={ username}; Password ={ password};";
-            var db = new OrmLiteConnectionFactory(connString1, PostgreSqlDialect.Provider);
-            return db;
+            var dbFactory = new OrmLiteConnectionFactory(PostgresDb_10, PostgreSqlDialect.Provider);
+            return dbFactory;
 
         }
-
     }
 }
