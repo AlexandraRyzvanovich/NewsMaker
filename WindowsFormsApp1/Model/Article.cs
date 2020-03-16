@@ -9,7 +9,8 @@ namespace WindowsFormsApp1.Model
         [AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime DateTime { get; set; }
+        public string url { get; set; }
+        public DateTime Date{ get; set; }
         public string Html { get; set; }
         public string Text { get; set; }
     }
