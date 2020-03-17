@@ -14,7 +14,7 @@ namespace WindowsFormsApp1
             switch(command)
             {
                 case "getNewArticle": 
-                    new ArticleCreatorService();
+                    new ArticleService();
                     break;
                 default: 
                    throw new Exception("No such command");

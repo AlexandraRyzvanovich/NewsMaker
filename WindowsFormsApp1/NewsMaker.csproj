@@ -142,7 +142,6 @@
     <Compile Include="Model\Article.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\ArticleCreator.cs" />
     <Compile Include="Service\ArticleService.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
