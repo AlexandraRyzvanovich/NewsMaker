@@ -12,7 +12,7 @@ namespace WindowsFormsApp1.Service
 {
     public class ArticleCreatorService
     {
-        List<string> hrefs = null;
+        static List<string> hrefs = null;
 
         public static async Task Execute()
         {
