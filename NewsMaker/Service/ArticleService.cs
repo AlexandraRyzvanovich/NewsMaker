@@ -8,6 +8,6 @@ namespace WindowsFormsApp1.Service
 {
     interface IArticleService
     {
-        Task Execute();
+        void Execute();
     }
 }

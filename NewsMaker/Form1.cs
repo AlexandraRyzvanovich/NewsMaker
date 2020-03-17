@@ -2,7 +2,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using WindowsFormsApp1.Service;
 
 namespace WindowsFormsApp1
 {
@@ -25,10 +24,11 @@ namespace WindowsFormsApp1
 
         }
 
-        private async void button1_ClickAsync(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             firstButton.Text = "Select all";
-            await ArticleCreatorService.Execute();
+            dao = new Dao();
+            dao.SelectAll();
             
         }
     }
