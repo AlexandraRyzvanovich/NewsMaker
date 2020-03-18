@@ -28,7 +28,8 @@ namespace WindowsFormsApp1
         private async void button1_ClickAsync(object sender, EventArgs e)
         {
             firstButton.Text = "Select all";
-            await ArticleService.GetLinks();
+            ArticleService service = new ArticleService();
+            service.ExecuteAsync();
             
         }
     }
