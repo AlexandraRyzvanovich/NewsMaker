@@ -15,9 +15,8 @@ namespace WindowsFormsApp1.Service
         {
             SiteParser siteParser = new SiteParser();
             
-             List<string> urlList = await siteParser.getAllLinksAsync();
-            var a = urlList.ToArray();
-
+            List<string> urlList = await siteParser.getAllLinksAsync();
+            
             
         }
 

@@ -28,7 +28,7 @@ namespace WindowsFormsApp1.Utils
             }
             return hrefs;
         }
-        private static async Task GetLinks()
+        private async Task GetLinks()
         {
             var config = new CrawlConfiguration
             {

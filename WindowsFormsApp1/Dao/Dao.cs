@@ -8,7 +8,7 @@ namespace NewsMaker.AbstractDao
 {
     public class Dao
     {
-        DbConnectionFactory dbConnector;
+        private readonly DbConnectionFactory dbConnector = new DbConnectionFactory();
         public void Save(Article article)
         {
             var dbFactory = dbConnector.createConnectionFactory();
