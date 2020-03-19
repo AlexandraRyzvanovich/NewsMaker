@@ -1,10 +1,13 @@
-﻿using Abot2.Crawler;
+﻿using Abot2.Core;
+using Abot2.Crawler;
 using Abot2.Poco;
 using AngleSharp.Html.Dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WindowsFormsApp1.Utils
@@ -12,48 +15,36 @@ namespace WindowsFormsApp1.Utils
 
     public class SiteParser
     {
-        private const string siteUrl = "https://belaruspartisan.by/search/";
+        private PageRequester pageRequester = new PageRequester(new CrawlConfiguration(), new WebContentExtractor());
+        private const string siteUrl = "https://belaruspartisan.by/lenta/";
+        private const string regExHtml = "<[^<>]+>";
 
-        private static List<string> hrefs = null;
-
-        public async Task<List<string>> getAllLinksAsync()
+        public async Task<List<string>> GetLinks()
         {
-            await GetLinks();
-            foreach (string href in hrefs)
-            {
-                if (!href.StartsWith("https://news.tut.by/"))
-                {
-                    hrefs.Remove(href);
-                }
-            }
+            var crawledPage = await pageRequester.MakeRequestAsync(new Uri(siteUrl));
+            var angleSharpHtmlDocument = crawledPage.AngleSharpHtmlDocument;
+            var anchors = angleSharpHtmlDocument.QuerySelectorAll("a").OfType<IHtmlAnchorElement>();
+
+            List<string> hrefs = anchors.Select(x => x.Href).Where(h => h.StartsWith("about")).ToList();
+
             return hrefs;
         }
-        private async Task GetLinks()
+
+        public async Task<List<string>> GetDomElements(string url)
         {
-            var config = new CrawlConfiguration
-            {
-                MaxPagesToCrawl = 1000,
-                MinCrawlDelayPerDomainMilliSeconds = 3000
-            };
+            var crawledPage = await pageRequester.MakeRequestAsync(new Uri(url));
+            var angleSharpHtmlDocument = crawledPage.AngleSharpHtmlDocument;
+            string title = angleSharpHtmlDocument.Title;
+            List<string> elements = new List<string>();
+            elements.Add(title);
+            string pageContent = crawledPage.Content.Text;
+            string html = Regex.Replace(pageContent, @"<[^>]*>", string.Empty);
+            elements.Add(html);
+            string text = Regex.Replace(pageContent, @">([a-z, ,0-9]*)<", string.Empty);
+            elements.Add(text);
 
-            var crawler = new PoliteWebCrawler(config);
-
-            crawler.PageCrawlCompleted += PageCrawlCompleted;
-
-            var crawlResult = await crawler.CrawlAsync(new Uri(siteUrl));
+            return elements;
         }
-        private static void PageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
-        {
-            var crawledPage = e.CrawledPage;
-            var crawlContext = e.CrawlContext;
 
-            var httpStatus = crawledPage.HttpResponseMessage.StatusCode;
-            var rawPageText = crawledPage.Content.Text;
-
-            var document = crawledPage.AngleSharpHtmlDocument;
-            var anchors = document.QuerySelectorAll("a").OfType<IHtmlAnchorElement>();
-            List<string> hrefs;
-            hrefs = anchors.Select(x => x.Href).ToList();
-        }
     }
 }

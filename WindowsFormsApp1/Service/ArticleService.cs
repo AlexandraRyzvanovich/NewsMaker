@@ -3,7 +3,6 @@ using Abot2.Poco;
 using AngleSharp.Html.Dom;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WindowsFormsApp1.Utils;
 
@@ -15,10 +14,18 @@ namespace WindowsFormsApp1.Service
         {
             SiteParser siteParser = new SiteParser();
             
-            List<string> urlList = await siteParser.getAllLinksAsync();
-            
-            
+            List<string> urlList = await siteParser.GetLinks();
+            UrlParser parser = new UrlParser();
+            foreach(string url in urlList)
+            {
+                await siteParser.GetDomElements(url);
+
+              
+
+            }
+
         }
+
 
     }
 }
