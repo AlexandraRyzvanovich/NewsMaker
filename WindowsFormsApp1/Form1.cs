@@ -30,7 +30,7 @@ namespace WindowsFormsApp1
         {
             firstButton.Text = "Select all";
             ArticleService service = new ArticleService();
-            await service.ExecuteAsync();
+            await service.GetLinks();
             
         }
     }

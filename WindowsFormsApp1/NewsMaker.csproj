@@ -144,7 +144,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ArticleService.cs" />
     <Compile Include="Utils\SiteParser.cs" />
-    <Compile Include="Utils\UrlParser.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
