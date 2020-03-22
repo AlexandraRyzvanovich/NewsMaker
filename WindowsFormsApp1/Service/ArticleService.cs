@@ -23,18 +23,18 @@ namespace WindowsFormsApp1.Service
         {
             var config = new CrawlConfiguration
             {
-                MaxPagesToCrawl = 300, //Only crawl 10 pages
-                MinCrawlDelayPerDomainMilliSeconds = 300 //Wait this many millisecs between requests
+                MaxPagesToCrawl = 300, 
+                MinCrawlDelayPerDomainMilliSeconds = 300
             };
             var crawler = new PoliteWebCrawler(config);
 
             crawler.PageCrawlCompleted += PageCrawlCompleted;//Several events available...
-            crawler.PageCrawlCompleted += crawler_ProcessPageCrawlCompleted;
+            crawler.PageCrawlCompleted += Crawler_ProcessPageCrawlCompleted;
 
             var crawlResult = await crawler.CrawlAsync(new Uri(siteUrl));
         }
 
-        async void crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
+        async void Crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
         {
             CrawledPage crawledPage = e.CrawledPage;
 
@@ -65,11 +65,11 @@ namespace WindowsFormsApp1.Service
 
                 var newsDate = angleSharpHtmlDocument.GetElementsByClassName("news-date-time news_date");
 
-                string date = null;
+                DateTime date = new DateTime();
 
                 foreach(var t in newsDate)
                 {
-                    date += DateTime.Parse(t.TextContent);
+                    date = DateTime.Parse(t.TextContent);
                 }
                 Article article = new Article(title, url, date, html, text);
 

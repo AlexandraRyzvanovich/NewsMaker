@@ -7,7 +7,7 @@ namespace WindowsFormsApp1.Model
     public class Article
     {
 
-        public Article(string title, string url, string date, string html, string text)
+        public Article(string title, string url, DateTime date, string html, string text)
         {
             Title = title;
             Url = url;
@@ -17,6 +17,7 @@ namespace WindowsFormsApp1.Model
         }
 
         [AutoIncrement]
+        [Unique]
         public int Id { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }

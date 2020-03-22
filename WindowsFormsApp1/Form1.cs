@@ -10,15 +10,13 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         private Button firstButton = new Button();
-        Dao dao;
         public Form1()
         {
             InitializeComponent();
-            InitializeComponent();
             Text = "Hello World!";
             this.BackColor = Color.Pink;
-            this.Width = 250;
-            this.Height = 250;
+            this.Width = 350;
+            this.Height = 350;
         }
 
         private void Form1_Load(object sender, EventArgs e)
