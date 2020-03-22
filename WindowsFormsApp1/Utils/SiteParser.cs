@@ -16,7 +16,7 @@ namespace WindowsFormsApp1.Utils
 
     public class SiteParser
     {
-
-
+        
     }
+
 }

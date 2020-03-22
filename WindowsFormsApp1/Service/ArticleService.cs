@@ -3,12 +3,14 @@ using Abot2.Poco;
 using AngleSharp;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using NewsMaker.AbstractDao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WindowsFormsApp1.Model;
 using WindowsFormsApp1.Utils;
 
 namespace WindowsFormsApp1.Service
@@ -47,12 +49,34 @@ namespace WindowsFormsApp1.Service
                 Console.WriteLine($"Page had no content {crawledPage.Uri.AbsoluteUri}");
 
             var angleSharpHtmlDocument = crawledPage.AngleSharpHtmlDocument;
-
-            var a = angleSharpHtmlDocument.QuerySelectorAll("div").OfType<IHtmlAnchorElement>().Select(m => m.ClassName.Equals("pw article")).ToList();
-            //.Where(m => m.ClassName.Equals("pw article"))
-            if (a.Count > 0)
+            var url = crawledPage.Uri.AbsoluteUri;
+            var allArticle = angleSharpHtmlDocument.GetElementsByClassName("pw article");
+            if (allArticle.Length > 0)
             {
-                Console.WriteLine("");
+                string text = null;
+                string html = null;
+                string title = null;
+                foreach ( var f in allArticle)
+                {
+                    title += f.GetElementsByTagName("h1").First().TextContent;
+                    text += f.TextContent;
+                    html += f.InnerHtml;
+                }
+
+                var newsDate = angleSharpHtmlDocument.GetElementsByClassName("news-date-time news_date");
+
+                string date = null;
+
+                foreach(var t in newsDate)
+                {
+                    date += DateTime.Parse(t.TextContent);
+                }
+                Article article = new Article(title, url, date, html, text);
+
+                Dao dao = new Dao();
+
+                dao.Save(article);
+
             }
         }
 
