@@ -9,7 +9,6 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        private Button firstButton = new Button();
         public Form1()
         {
             InitializeComponent();
@@ -24,11 +23,20 @@ namespace WindowsFormsApp1
 
         }
 
-        private async void button1_ClickAsync(object sender, EventArgs e)
+        private async void download_ClickAsync(object sender, EventArgs e)
         {
-            firstButton.Text = "Select all";
             ArticleService service = new ArticleService();
             await service.GetLinks();
+            
+        }
+
+        private void select_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
             
         }
     }

@@ -17,13 +17,14 @@ namespace WindowsFormsApp1.Service
 {
     public class ArticleService
     {
-            private const string siteUrl = "https://belaruspartisan.by/lenta/";
+        private const string siteUrl = "https://belaruspartisan.by/lenta/";
+        private Dao dao = new Dao();
 
-        public async Task GetLinks()
+        public async Task DownloadAllArticles()
         {
             var config = new CrawlConfiguration
             {
-                MaxPagesToCrawl = 300, 
+                MaxPagesToCrawl = 300,
                 MinCrawlDelayPerDomainMilliSeconds = 300
             };
             var crawler = new PoliteWebCrawler(config);
@@ -34,7 +35,22 @@ namespace WindowsFormsApp1.Service
             var crawlResult = await crawler.CrawlAsync(new Uri(siteUrl));
         }
 
-        async void Crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
+        public int FindWordInText(string textToFind, int atricleId)
+        {
+            Article article = dao.SelectById(atricleId);
+            string text = article.Text;
+            TextFinder finder = new TextFinder();
+            int occurancesInText = finder.FindTextOccurances(textToFind, text);
+
+            return occurancesInText;
+        }
+
+        public void Create()
+        {
+
+        }
+
+        private async void Crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
         {
             CrawledPage crawledPage = e.CrawledPage;
 
@@ -56,7 +72,7 @@ namespace WindowsFormsApp1.Service
                 string text = null;
                 string html = null;
                 string title = null;
-                foreach ( var f in allArticle)
+                foreach (var f in allArticle)
                 {
                     title += f.GetElementsByTagName("h1").First().TextContent;
                     text += f.TextContent;
@@ -67,13 +83,11 @@ namespace WindowsFormsApp1.Service
 
                 DateTime date = new DateTime();
 
-                foreach(var t in newsDate)
+                foreach (var t in newsDate)
                 {
                     date = DateTime.Parse(t.TextContent);
                 }
                 Article article = new Article(title, url, date, html, text);
-
-                Dao dao = new Dao();
 
                 dao.Save(article);
 

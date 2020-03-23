@@ -32,13 +32,13 @@ namespace NewsMaker.AbstractDao
             }
         }
 
-        public List<Article> SelectById(int[] ids)
+        public Article SelectById(int ids)
         {
             var dbFactory = dbConnector.createConnectionFactory();
             using (var db = dbFactory.Open())
             {
-                var articlesByIds = db.SelectByIds<Article>(ids);
-                return articlesByIds;
+                var articleById = db.Select<Article>().Find(m=> m.Id == ids);
+                return articleById;
             }
         }
     }
