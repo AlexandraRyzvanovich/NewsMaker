@@ -1,17 +1,13 @@
 ﻿using Abot2.Crawler;
 using Abot2.Poco;
-using AngleSharp;
-using AngleSharp.Html.Dom;
-using AngleSharp.Html.Parser;
 using NewsMaker.AbstractDao;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WindowsFormsApp1.Model;
 using WindowsFormsApp1.Utils;
+using System.Collections.Generic;
 
 namespace WindowsFormsApp1.Service
 {
@@ -47,7 +43,13 @@ namespace WindowsFormsApp1.Service
 
         public void Create()
         {
-
+            List<Article> articles = dao.SelectAll();
+            foreach(Article article in articles)
+            {
+                PullentiEntitiesCreator pullentiEntitiesCreator = new PullentiEntitiesCreator();
+                string text = article.Text;
+                pullentiEntitiesCreator.create(text);
+            }
         }
 
         private async void Crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)

@@ -27,7 +27,6 @@ namespace NewsMaker.AbstractDao
             using (var db = dbFactory.Open())
             {
                 var articles = db.Select<Article>();
-                articles.PrintDump();
                 return articles;
             }
         }
