@@ -6,7 +6,7 @@ using WindowsFormsApp1.Model;
 
 namespace NewsMaker.AbstractDao
 {
-    public class Dao
+    public class ArticleDao
     {
         private readonly DbConnectionFactory dbConnector = new DbConnectionFactory();
         public void Save(Article article)
@@ -15,6 +15,7 @@ namespace NewsMaker.AbstractDao
 
             using (var db = dbFactory.Open())
             {
+                db.CreateTableIfNotExists<Entities>();
                 db.CreateTableIfNotExists<Article>();
                 db.Insert(article);
 

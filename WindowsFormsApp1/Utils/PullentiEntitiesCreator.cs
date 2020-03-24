@@ -10,6 +10,8 @@ namespace WindowsFormsApp1.Utils
 {
     class PullentiEntitiesCreator
     {
+        private List<string> entitiesList = new List<string>();
+        
         public List<Referent> CreateGeoEntities(string text)
         {
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
@@ -45,21 +47,28 @@ namespace WindowsFormsApp1.Utils
                 return listOrg;
             }
         }
-        public List<Referent> CreatePersonEntities(string text)
+        public void CreatePersonEntities(string text)
         {
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
             PersonAnalyzer.Initialize();
             using (Processor proc = ProcessorService.CreateSpecificProcessor(PersonAnalyzer.ANALYZER_NAME))
             {
                 AnalysisResult ar = proc.Process(new SourceOfAnalysis(text));
-                var listPerson = new List<Referent>();
+                var listPerson = new List<string>();
                 foreach (var e in ar.Entities)
                     if (e is PersonReferent)
                     {
-                        listPerson.Add(e);
-                        Console.WriteLine(e);
+                        var props = e.Slots;
+                        var personEntitiName = e.ToString();
+                        string properties = null;
+
+                        foreach (var prop in props)
+                        {
+                            var name = prop.TypeName.ToString();
+                            var value = prop.Value.ToString();
+                            properties += name += " = " + value + ";";
+                        }
                     }
-                return listPerson;
             }
         }
 

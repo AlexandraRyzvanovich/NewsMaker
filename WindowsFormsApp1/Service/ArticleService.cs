@@ -14,7 +14,7 @@ namespace WindowsFormsApp1.Service
     public class ArticleService
     {
         private const string siteUrl = "https://belaruspartisan.by/lenta/";
-        private Dao dao = new Dao();
+        private ArticleDao dao = new ArticleDao();
 
         public async Task DownloadAllArticles()
         {
@@ -48,7 +48,7 @@ namespace WindowsFormsApp1.Service
             {
                 PullentiEntitiesCreator pullentiEntitiesCreator = new PullentiEntitiesCreator();
                 string text = article.Text;
-                pullentiEntitiesCreator.CreateGeoEntities(text);
+                pullentiEntitiesCreator.CreatePersonEntities(text);
             }
         }
 
