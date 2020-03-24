@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EP.Ner;
 using EP.Ner.Core;
 using EP.Morph;
@@ -16,11 +12,9 @@ namespace WindowsFormsApp1.Utils
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            // инициализация - необходимо проводить один раз до обработки текстов
             Console.Write("Initializing ... ");
 
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
-            // инициализируются все используемые анализаторы
             EP.Ner.Money.MoneyAnalyzer.Initialize();
             EP.Ner.Uri.UriAnalyzer.Initialize();
             EP.Ner.Phone.PhoneAnalyzer.Initialize();
