@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Connection\DbConnector.cs" />
     <Compile Include="Dao\ArticleDao.cs" />
+    <Compile Include="Dao\EntitiesDao.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,7 +145,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Article.cs" />
-    <Compile Include="Model\Entities.cs" />
+    <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\EntitiesType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

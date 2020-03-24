@@ -26,7 +26,7 @@ namespace WindowsFormsApp1.Model
         public string Text { get; set; }
 
         [Default (null)]
-        [ForeignKey(typeof(Entities))]
+        [ForeignKey(typeof(Entity))]
         public int? EntityId { get; set; }
     }
 }

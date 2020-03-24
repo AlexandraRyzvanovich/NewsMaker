@@ -8,7 +8,7 @@ using ServiceStack.DataAnnotations;
 
 namespace WindowsFormsApp1.Model
 {
-    public class Entities
+    public class Entity
     {
         [AutoIncrement]
         [PrimaryKey]

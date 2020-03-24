@@ -1,45 +1,49 @@
 ﻿using NewsMaker.ConnectionFactory;
 using ServiceStack.OrmLite;
-using ServiceStack.Text;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using WindowsFormsApp1.Model;
 
-namespace NewsMaker.AbstractDao
+namespace WindowsFormsApp1.Dao
 {
-    public class ArticleDao
+    class EntitiesDao
     {
         private readonly DbConnectionFactory dbConnector = new DbConnectionFactory();
-        public void Save(Article article)
+        public void Save(Entity entity)
         {
             var dbFactory = dbConnector.createConnectionFactory();
 
             using (var db = dbFactory.Open())
             {
                 db.CreateTableIfNotExists<Entity>();
-                db.CreateTableIfNotExists<Article>();
-                db.Insert(article);
+                db.CreateTableIfNotExists<Entity>();
+                db.Insert(entity);
 
             }
         }
-        public List<Article> SelectAll()
+        public List<Entity> SelectAll()
         {
             var dbFactory = dbConnector.createConnectionFactory();
 
             using (var db = dbFactory.Open())
             {
-                var articles = db.Select<Article>();
-                return articles;
+                var entities = db.Select<Entity>();
+                return entities;
             }
         }
 
-        public Article SelectById(int ids)
+        public Entity SelectById(int ids)
         {
             var dbFactory = dbConnector.createConnectionFactory();
             using (var db = dbFactory.Open())
             {
-                var articleById = db.Select<Article>().Find(m=> m.Id == ids);
-                return articleById;
+                var entityById = db.Select<Entity>().Find(m => m.Id == ids);
+                return entityById;
             }
         }
     }
+}
 }

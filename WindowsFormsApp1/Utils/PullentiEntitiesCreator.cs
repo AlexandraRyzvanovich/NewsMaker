@@ -47,7 +47,7 @@ namespace WindowsFormsApp1.Utils
                 return listOrg;
             }
         }
-        public void CreatePersonEntities(string text)
+        public List<string> CreatePersonEntities(string text)
         {
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
             PersonAnalyzer.Initialize();

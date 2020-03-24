@@ -43,10 +43,11 @@ namespace WindowsFormsApp1.Service
 
         public void Create()
         {
+            PullentiEntitiesCreator pullentiEntitiesCreator = new PullentiEntitiesCreator();
             List<Article> articles = dao.SelectAll();
+            List<Entity> entities = new List<Entity>();
             foreach(Article article in articles)
             {
-                PullentiEntitiesCreator pullentiEntitiesCreator = new PullentiEntitiesCreator();
                 string text = article.Text;
                 pullentiEntitiesCreator.CreatePersonEntities(text);
             }

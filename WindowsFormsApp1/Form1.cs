@@ -26,7 +26,7 @@ namespace WindowsFormsApp1
         private async void download_ClickAsync(object sender, EventArgs e)
         {
             ArticleService service = new ArticleService();
-            await service.DownloadAllArticles();
+            service.Create();
             
         }
 
