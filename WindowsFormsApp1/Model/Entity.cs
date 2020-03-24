@@ -15,6 +15,6 @@ namespace WindowsFormsApp1.Model
         public int Id { get; set; }
         public string Value { get; set; }
         public string Properties { get; set; }
-        public byte Type { get; set; }
+        public EntitiesType Type { get; set; }
     }
 }

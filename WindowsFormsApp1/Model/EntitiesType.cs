@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApp1.Model
 {
-    enum EntitiesType
+    public enum EntitiesType
     {
          geo = 1,
          person = 2,

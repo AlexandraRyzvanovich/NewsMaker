@@ -27,7 +27,6 @@ namespace WindowsFormsApp1
         {
             ArticleService service = new ArticleService();
             service.Create();
-            
         }
 
         private void select_Click(object sender, EventArgs e)

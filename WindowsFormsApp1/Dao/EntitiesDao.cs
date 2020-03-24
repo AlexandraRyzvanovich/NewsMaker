@@ -44,6 +44,16 @@ namespace WindowsFormsApp1.Dao
                 return entityById;
             }
         }
+
+        public List<Entity> SelectByEntityType(EntitiesType type)
+        {
+            var dbFactory = dbConnector.createConnectionFactory();
+            using (var db = dbFactory.Open())
+            {
+                var entityById = db.Select<Entity>().Where(m => m.Type == type).ToList();
+                return entityById;
+            }
+        }
     }
 }
-}
+
