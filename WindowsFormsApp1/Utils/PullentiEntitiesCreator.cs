@@ -11,7 +11,7 @@ namespace WindowsFormsApp1.Utils
     class PullentiEntitiesCreator
     {
         private List<string> entitiesList = new List<string>();
-        
+
         public List<Referent> CreateGeoEntities(string text)
         {
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
@@ -69,7 +69,10 @@ namespace WindowsFormsApp1.Utils
                             properties += name += " = " + value + ";";
                         }
                     }
+                return listPerson;
+
             }
+
         }
 
     }
