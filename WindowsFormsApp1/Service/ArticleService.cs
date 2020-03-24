@@ -48,7 +48,7 @@ namespace WindowsFormsApp1.Service
             {
                 PullentiEntitiesCreator pullentiEntitiesCreator = new PullentiEntitiesCreator();
                 string text = article.Text;
-                pullentiEntitiesCreator.create(text);
+                pullentiEntitiesCreator.CreateGeoEntities(text);
             }
         }
 
