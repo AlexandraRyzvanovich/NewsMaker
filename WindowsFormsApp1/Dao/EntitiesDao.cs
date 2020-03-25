@@ -19,7 +19,6 @@ namespace WindowsFormsApp1.Dao
             using (var db = dbFactory.Open())
             {
                 db.CreateTableIfNotExists<Entity>();
-                db.CreateTableIfNotExists<Entity>();
                 db.Insert(entity);
 
             }
@@ -52,6 +51,26 @@ namespace WindowsFormsApp1.Dao
             {
                 var entityById = db.Select<Entity>().Where(m => m.Type == type).ToList();
                 return entityById;
+            }
+        }
+        public void SaveAll(List<Entity> entities) 
+        {
+            var dbFactory = dbConnector.createConnectionFactory();
+
+            using (var db = dbFactory.Open())
+            {
+                db.CreateTableIfNotExists<Entity>();
+                db.InsertAll(entities);
+            }
+        }
+        public void UpdateAll(List<Entity> entities)
+        {
+            var dbFactory = dbConnector.createConnectionFactory();
+
+            using (var db = dbFactory.Open())
+            {
+                db.CreateTableIfNotExists<Entity>();
+                db.UpdateAll(entities);
             }
         }
     }

@@ -10,6 +10,13 @@ namespace WindowsFormsApp1.Model
 {
     public class Entity
     {
+        public Entity(string value, string properties, EntitiesType type)
+        {
+            this.Value = value;
+            this.Properties = properties;
+            this.Type = type;
+        }
+
         [AutoIncrement]
         [PrimaryKey]
         public int Id { get; set; }

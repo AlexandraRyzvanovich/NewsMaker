@@ -5,72 +5,133 @@ using EP.Ner.Geo;
 using System.Collections.Generic;
 using EP.Ner.Org;
 using EP.Ner.Person;
+using WindowsFormsApp1.Model;
 
 namespace WindowsFormsApp1.Utils
 {
     class PullentiEntitiesCreator
     {
-        private List<string> entitiesList = new List<string>();
+        public List<Entity> CreateEntities(List<Entity> entities, List<Article> articles)
+        {
+            foreach (var article in articles)
+            {
+                var text = article.Text;
+                entities = CreateGeoEntities(entities, text);
+                entities = CreateOrganizationEntities(entities, text);
+                entities = CreatePersonEntities(entities, text);
+            }
+            return entities;
+        }
 
-        public List<Referent> CreateGeoEntities(string text)
+        private List<Entity> CreateGeoEntities(List<Entity> entities, string text)
         {
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
             GeoAnalyzer.Initialize();
             using (Processor proc = ProcessorService.CreateSpecificProcessor(GeoAnalyzer.ANALYZER_NAME))
             {
                 AnalysisResult ar = proc.Process(new SourceOfAnalysis(text));
-                var listGeo = new List<Referent>();
-                foreach (var e in ar.Entities)
-                    if (e is GeoReferent)
+                foreach (var geo in ar.Entities)
+                    if (geo is GeoReferent)
                     {
-                        listGeo.Add(e);
-                        Console.WriteLine(e);
+                        var geoEntitiName = geo.ToString();
+                        string entityproperties = null;
+
+                        var props = geo.Slots;
+                        string newProperties = null;
+                        foreach (var prop in props)
+                        {
+                            var name = prop.TypeName.ToString();
+                            var value = prop.Value.ToString();
+                            newProperties += name += " = " + value + ";";
+                        }
+                        var existingEntity = entities.Find(m => m.Value.Equals(geoEntitiName));
+                        if (existingEntity != null)
+                        {
+                            entityproperties = existingEntity.Properties;
+                            if (entityproperties != newProperties)
+                            {
+                                newProperties += entityproperties;
+                            }
+                            entities.Remove(existingEntity);
+                        }
+
+                        entities.Add(new Entity(geoEntitiName, newProperties, EntitiesType.geo));
                     }
-                return listGeo;
+                return entities;
             }
         }
 
-        public List<Referent> CreateOrganizationEntities(string text)
+        private List<Entity> CreateOrganizationEntities(List<Entity> entities, string text)
         {
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
-            EP.Ner.Org.OrganizationAnalyzer.Initialize();
+            OrganizationAnalyzer.Initialize();
             using (Processor proc = ProcessorService.CreateSpecificProcessor(OrganizationAnalyzer.ANALYZER_NAME))
             {
                 AnalysisResult ar = proc.Process(new SourceOfAnalysis(text));
-                var listOrg = new List<Referent>();
-                foreach (var e in ar.Entities)
-                    if (e is OrganizationReferent)
+                foreach (var org in ar.Entities)
+                    if (org is OrganizationReferent)
                     {
-                        listOrg.Add(e);
-                        Console.WriteLine(e);
+                        var orgEntitiName = org.ToString();
+                        string entityproperties = null;
+
+                        var props = org.Slots;
+                        string newProperties = null;
+                        foreach (var prop in props)
+                        {
+                            var name = prop.TypeName.ToString();
+                            var value = prop.Value.ToString();
+                            newProperties += name += " = " + value + ";";
+                        }
+                        var existingEntity = entities.Find(m => m.Value.Equals(orgEntitiName));
+                        if (existingEntity != null)
+                        {
+                            entityproperties = existingEntity.Properties;
+                            if (entityproperties != newProperties)
+                            {
+                                newProperties += entityproperties;
+                            }
+                            entities.Remove(existingEntity);
+                        }
+                        entities.Add(new Entity(orgEntitiName, newProperties, EntitiesType.person));
                     }
-                return listOrg;
+                return entities;
             }
         }
-        public List<string> CreatePersonEntities(string text)
+        private List<Entity> CreatePersonEntities(List<Entity> entities, string text)
         {
             ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
             PersonAnalyzer.Initialize();
             using (Processor proc = ProcessorService.CreateSpecificProcessor(PersonAnalyzer.ANALYZER_NAME))
             {
                 AnalysisResult ar = proc.Process(new SourceOfAnalysis(text));
-                var listPerson = new List<string>();
                 foreach (var e in ar.Entities)
                     if (e is PersonReferent)
                     {
-                        var props = e.Slots;
                         var personEntitiName = e.ToString();
-                        string properties = null;
+                        string entityproperties = null;
 
+                        var props = e.Slots;
+                        string newProperties = null;
                         foreach (var prop in props)
                         {
                             var name = prop.TypeName.ToString();
                             var value = prop.Value.ToString();
-                            properties += name += " = " + value + ";";
+                            newProperties += name += " = " + value + ";";
                         }
-                    }
-                return listPerson;
+                        var existingEntity = entities.Find(m => m.Value.Equals(personEntitiName));
+                        if (existingEntity != null)
+                        {
+                            entityproperties = existingEntity.Properties;
+                            if (entityproperties != newProperties)
+                            {
+                                newProperties += entityproperties;
+                            }
+                            entities.Remove(existingEntity);
+                        }
 
+                        entities.Add(new Entity(personEntitiName, newProperties, EntitiesType.person));
+                    }
+                return entities;
             }
 
         }

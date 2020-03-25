@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 using WindowsFormsApp1.Model;
 using WindowsFormsApp1.Utils;
 using System.Collections.Generic;
+using WindowsFormsApp1.Dao;
 
 namespace WindowsFormsApp1.Service
 {
     public class ArticleService
     {
         private const string siteUrl = "https://belaruspartisan.by/lenta/";
-        private ArticleDao dao = new ArticleDao();
+        private ArticleDao articleDao = new ArticleDao();
+        private EntitiesDao entitiesDao = new EntitiesDao();
 
         public async Task DownloadAllArticles()
         {
@@ -25,7 +27,7 @@ namespace WindowsFormsApp1.Service
             };
             var crawler = new PoliteWebCrawler(config);
 
-            crawler.PageCrawlCompleted += PageCrawlCompleted;//Several events available...
+            crawler.PageCrawlCompleted += PageCrawlCompleted;
             crawler.PageCrawlCompleted += Crawler_ProcessPageCrawlCompleted;
 
             var crawlResult = await crawler.CrawlAsync(new Uri(siteUrl));
@@ -33,7 +35,7 @@ namespace WindowsFormsApp1.Service
 
         public int FindWordInText(string textToFind, int atricleId)
         {
-            Article article = dao.SelectById(atricleId);
+            Article article = articleDao.SelectById(atricleId);
             string text = article.Text;
             TextFinder finder = new TextFinder();
             int occurancesInText = finder.FindTextOccurances(textToFind, text);
@@ -44,13 +46,26 @@ namespace WindowsFormsApp1.Service
         public void Create()
         {
             PullentiEntitiesCreator pullentiEntitiesCreator = new PullentiEntitiesCreator();
-            List<Article> articles = dao.SelectAll();
-            List<Entity> entities = new List<Entity>();
-            foreach(Article article in articles)
+            List<Article> articles = articleDao.SelectAll();
+            List<Entity> entities = entitiesDao.SelectAll();
+            List<Entity> newEntities = pullentiEntitiesCreator.CreateEntities(entities, articles);
+            List<Entity> entitiesToUpdate = null;
+            foreach (var item in newEntities)
             {
-                string text = article.Text;
-                pullentiEntitiesCreator.CreatePersonEntities(text);
+                var oldEntity = entities.Find(c => c.Value.Equals(item.Value));
+                if (oldEntity != null)
+                {
+                    oldEntity.Properties = item.Properties;
+                    entitiesToUpdate.Add(oldEntity);
+                }
             }
+            foreach (var item in entitiesToUpdate)
+            {
+                var entityToRemove = newEntities.Find(m => m.Value.Equals(item.Value));
+                newEntities.Remove(entityToRemove);
+            }
+            entitiesDao.SaveAll(newEntities);
+            entitiesDao.UpdateAll(entitiesToUpdate);
         }
 
         private async void Crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
@@ -92,7 +107,7 @@ namespace WindowsFormsApp1.Service
                 }
                 Article article = new Article(title, url, date, html, text);
 
-                dao.Save(article);
+                articleDao.Save(article);
 
             }
         }
